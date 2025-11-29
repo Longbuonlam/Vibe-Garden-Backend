@@ -25,10 +25,15 @@ router.post('/', async (req: Request, res: Response) => {
     }
 
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
       auth: {
         user: gmailUser,
         pass: gmailPass,
+      },
+      tls: {
+        rejectUnauthorized: false,
       },
     });
 
