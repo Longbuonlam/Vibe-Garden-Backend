@@ -94,7 +94,7 @@ router.post('/', async (req: Request, res: Response) => {
     `;
 
     await resend.emails.send({
-      from: 'Tiệm Hoa Cô Nàng <donhang@tiemhoaconang.id.vn>',
+      from: 'Tiệm Hoa Có Nàng <donhang@tiemhoaconang.id.vn>',
       to: ['sonlong2302@gmail.com', 'hong040125@gmail.com'],
       subject: `Đơn hàng mới từ ${customerName} — ${subtotal.toFixed(3)}đ`,
       html,
