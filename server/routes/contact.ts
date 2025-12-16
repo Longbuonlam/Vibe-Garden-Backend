@@ -29,7 +29,7 @@ router.post('/', async (req: Request, res: Response) => {
     `;
 
     await resend.emails.send({
-      from: 'Tiệm Hoa Cô Nàng <donhang@send.tiemhoaconang.id.vn>',
+      from: 'Tiệm Hoa Cô Nàng <donhang@tiemhoaconang.id.vn>',
       to: ['sonlong2302@gmail.com', 'ronsanbot@gmail.com'],
       subject: `Tiệm hoa có nàng nhận được 1 tin nhắn mới từ ${name}`,
       html,
