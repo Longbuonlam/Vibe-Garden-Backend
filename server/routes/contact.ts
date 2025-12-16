@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
 interface ContactRequestBody {
   name: string;
@@ -7,6 +7,7 @@ interface ContactRequestBody {
   message: string;
 }
 
+const resend = new Resend(process.env.RESEND_API_KEY);
 const router = Router();
 
 router.post('/', async (req: Request, res: Response) => {
@@ -16,26 +17,6 @@ router.post('/', async (req: Request, res: Response) => {
     if (!name || !email || !message) {
       return res.status(400).json({ success: false, error: 'Missing required fields' });
     }
-
-    const gmailUser = process.env.GMAIL_USER;
-    const gmailPass = process.env.GMAIL_PASS;
-
-    if (!gmailUser || !gmailPass) {
-      return res.status(500).json({ success: false, error: 'Email credentials not configured on server' });
-    }
-
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      auth: {
-        user: gmailUser,
-        pass: gmailPass,
-      },
-      tls: {
-        rejectUnauthorized: false,
-      },
-    });
 
     const html = `
       <div style="font-family:Arial,Helvetica,sans-serif;color:#111">
@@ -47,15 +28,13 @@ router.post('/', async (req: Request, res: Response) => {
       </div>
     `;
 
-    const mailOptions = {
-      from: gmailUser,
+    await resend.emails.send({
+      from: 'onboarding@resend.dev',
       to: 'sonlong2302@gmail.com',
       subject: `Tiệm hoa có nàng nhận được 1 tin nhắn mới từ ${name}`,
       html,
       replyTo: email,
-    };
-
-    await transporter.sendMail(mailOptions);
+    });
 
     return res.status(200).json({ success: true, message: 'Message sent successfully' });
   } catch (err: any) {

@@ -1,5 +1,7 @@
 import { Router, Request, Response } from 'express';
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 interface CartItem {
   id: string;
@@ -37,26 +39,6 @@ router.post('/', async (req: Request, res: Response) => {
     if (!shippingInfo || !cartItems || !Array.isArray(cartItems)) {
       return res.status(400).json({ success: false, error: 'Invalid request body' });
     }
-
-    const gmailUser = process.env.GMAIL_USER;
-    const gmailPass = process.env.GMAIL_PASS;
-
-    if (!gmailUser || !gmailPass) {
-      return res.status(500).json({ success: false, error: 'Email credentials not configured on server' });
-    }
-
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      auth: {
-        user: gmailUser,
-        pass: gmailPass,
-      },
-      tls: {
-        rejectUnauthorized: false,
-      },
-    });
 
     const customerName = `${shippingInfo.firstName} ${shippingInfo.lastName}`;
 
@@ -113,15 +95,13 @@ router.post('/', async (req: Request, res: Response) => {
       </div>
     `;
 
-    const mailOptions = {
-      from: gmailUser,
+    await resend.emails.send({
+      from: 'onboarding@resend.dev',
       to: 'sonlong2302@gmail.com',
       subject: `Đon hàng mới từ ${customerName} — ${total.toFixed(3)}đ`,
       html,
       replyTo: shippingInfo.email,
-    };
-
-    await transporter.sendMail(mailOptions);
+    });
 
     return res.status(200).json({ success: true, message: 'Order placed successfully' });
   } catch (err: any) {
