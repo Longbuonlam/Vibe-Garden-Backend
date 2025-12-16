@@ -77,9 +77,7 @@ router.post('/', async (req: Request, res: Response) => {
         </table>
 
         <div style="max-width:720px;margin-top:16px;padding:12px;border:1px solid #f0f0f0;background:#fafafa">
-          <p style="margin:6px 0"><strong>Tạm tính:</strong> ${subtotal.toFixed(3)}đ</p>
-          // <p style="margin:6px 0"><strong>Tax:</strong> $${tax.toFixed(2)}</p>
-          <p style="margin:6px 0;font-size:1.1em"><strong>Tổng cộng:</strong> ${total.toFixed(3)}đ</p>
+          <p style="margin:6px 0;font-size:1.1em"><strong>Tổng cộng:</strong> ${subtotal.toFixed(3)}đ</p>
         </div>
 
         <h3 style="margin-top:18px">Thông tin giao hàng</h3>
@@ -97,8 +95,8 @@ router.post('/', async (req: Request, res: Response) => {
 
     await resend.emails.send({
       from: 'onboarding@resend.dev',
-      to: 'sonlong2302@gmail.com',
-      subject: `Đon hàng mới từ ${customerName} — ${total.toFixed(3)}đ`,
+      to: ['sonlong2302@gmail.com', 'hong040125@gmail.com'],
+      subject: `Đon hàng mới từ ${customerName} — ${subtotal.toFixed(3)}đ`,
       html,
       replyTo: shippingInfo.email,
     });
