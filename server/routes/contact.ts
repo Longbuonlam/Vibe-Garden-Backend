@@ -20,7 +20,7 @@ router.post('/', async (req: Request, res: Response) => {
 
     const html = `
       <div style="font-family:Arial,Helvetica,sans-serif;color:#111">
-        <h3>Tiêm hoa có nàng nhận được 1 tin nhắn mới</h3>
+        <h3>Tiệm hoa có nàng nhận được 1 tin nhắn mới</h3>
         <p><strong>Khách hàng:</strong> ${name} (${email})</p>
         <p><strong>Tin nhắn:</strong></p>
         <blockquote style="background:#f8f8f8;padding:12px;border-left:4px solid #e6e6e6">${String(message)}</blockquote>
